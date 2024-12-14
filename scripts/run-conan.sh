@@ -1,6 +1,6 @@
 #!/usr/bin/sh
 
-baseDir=$(dirname $0)
-outDir=$(cat ${baseDir}/OutDirName)
-cd ${baseDir}/..
-conan install . --output-folder=${baseDir}/../${outDir} --build=missing --profile=debug
+cd $(dirname $0)
+outDir=$(cat ./OutDirName)
+cd ..
+conan install . --output-folder=./${outDir} --build=missing --profile=debug

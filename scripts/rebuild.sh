@@ -1,6 +1,8 @@
 #!/usr/bin/sh
-baseDir=$(dirname $0)
-${baseDir}/clear.sh
-${baseDir}/run-conan.sh
-${baseDir}/generate-project-files.sh
-${baseDir}/build.sh
+
+cd $(dirname $0)
+
+./clear.sh
+./run-conan.sh
+./generate-project-files.sh
+./build.sh
