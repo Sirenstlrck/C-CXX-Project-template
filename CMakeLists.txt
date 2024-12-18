@@ -15,8 +15,9 @@ if(GTest_FOUND)
     add_executable(${TESTS_PROJECT_NAME}
         ${TESTS_SRC_DIR}/Foo.cpp)
     target_link_libraries(${TESTS_PROJECT_NAME} PRIVATE gtest::gtest)
+    target_include_directories(${TESTS_PROJECT_NAME} PRIVATE ${PROJECT_SRC_DIR})
 else()
-    message(WARNING "Failed to fing GTest!")
+    message(WARNING "Failed to find GTest!")
 endif()
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
