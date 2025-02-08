@@ -13,10 +13,10 @@ class Platform(Enum):
     Linux = "Linux"
     Windows = "Win32"
 
-def PlatformFromStr(str: str) -> Platform:
-    if str == "linux" or "linux2":
+def PlatformFromStr(s: str) -> Platform:
+    if s == "linux" or s == "linux2":
         return Platform.Linux
-    elif str == "win32":
+    elif s == "win32":
         return Platform.Windows
     else:
         raise Exception("Unsupported platform")
@@ -43,15 +43,15 @@ class RunArgs:
 
 def GetCmakeString(args: RunArgs) -> str:
     if args.generator == Generator.VS17_2022:
-        return f"cmake . -B {args.outDir} -G '{args.generator.value}' -DCMAKE_TOOLCHAIN_FILE=build/generators/conan_toolchain.cmake"
+        return f"cmake . -B {args.outDir} -G \"{args.generator.value}\" -DCMAKE_TOOLCHAIN_FILE=build/generators/conan_toolchain.cmake"
     elif args.generator == Generator.UnixMakefiles:
-        return f"cmake . -B {args.outDir} -G '{args.generator.value}' -DCMAKE_BUILD_TYPE={args.profile.value} -DCMAKE_TOOLCHAIN_FILE=build/{args.profile.value}/generators/conan_toolchain.cmake"
+        return f"cmake . -B {args.outDir} -G \"{args.generator.value}\" -DCMAKE_BUILD_TYPE={args.profile.value} -DCMAKE_TOOLCHAIN_FILE=build/{args.profile.value}/generators/conan_toolchain.cmake"
     else:
         raise Exception("Unsupported generator")
 
 def GetBuildString(args: RunArgs) -> str:
     if args.generator == Generator.VS17_2022:
-        return f"cmake --build {args.outDir} --profile {args.profile.value}"
+        return f"cmake --build {args.outDir}"# --profile {args.profile.value}"
     elif args.generator == Generator.UnixMakefiles:
         return f"cmake --build {args.outDir}"
     else:
@@ -71,7 +71,7 @@ if __name__ == "__main__":
         parser.add_argument("-no-conan", action="store_true", help="Skip conan run")
         parser.add_argument("-no-cmake", action="store_true", help= "Skip build files generation")
         parser.add_argument("-no-build", action="store_true", help="Skip build")
-        parser.add_argument("-clean-first", action="store_true", help="Skip build")
+        parser.add_argument("-clean-first", action="store_true", help="Clear out folder first")
         args = parser.parse_args()
 
         runArgs = RunArgs()
@@ -88,7 +88,7 @@ if __name__ == "__main__":
         else:
             runArgs.profile = args.profile
 
-        runArgs.outDir = os.path.join(scriptDir, "..", outDir)
+        runArgs.outDir = os.path.join(scriptDir, outDir)
         if args.clean_first and os.path.exists(runArgs.outDir):
             print(f"[Removing '{runArgs.outDir}' directory]")
             shutil.rmtree(runArgs.outDir)
